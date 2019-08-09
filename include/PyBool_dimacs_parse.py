@@ -1,3 +1,4 @@
+from __future__ import print_function
 # A Ply parser for the dimacs file format.
 # importing lex and yacc
 import ply.lex as lex

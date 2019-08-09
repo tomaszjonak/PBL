@@ -9,6 +9,7 @@
 #
 # Goal: Keep it under 200 Lines!
 
+from __future__ import print_function
 import PyBool_public_interface as Bool
 import copy
 import sys

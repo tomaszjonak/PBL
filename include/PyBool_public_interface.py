@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Tyler Sorensen
 # February 15, 2012
 # University of Utah
@@ -7,8 +8,8 @@
 # The public interface for PyBool. Methods and representation
 # styles are described more completely in README.txt
 
-import PyBool_algorithms as PBA
-import PyBool_builder as PBB
+from . import PyBool_algorithms as PBA
+from . import PyBool_builder as PBB
 import copy
 import pdb
 
@@ -245,7 +246,7 @@ def parse_dimacs(fname):
     formula
     """
 
-    from PyBool_dimacs_parse import parse_file as parse_dimacs_file
+    from .PyBool_dimacs_parse import parse_file as parse_dimacs_file
     clauses = parse_dimacs_file(fname)
 
     return {"num_vars": len(cnf_vars(clauses)),
@@ -290,5 +291,5 @@ def parse_std(fname):
     "var_order": the optional ordering of the variables
     "main_expr": the main expression parsed
     """
-    from PyBool_std_parse import parse_file as parse_std_file
+    from .PyBool_std_parse import parse_file as parse_std_file
     return parse_std_file(fname)

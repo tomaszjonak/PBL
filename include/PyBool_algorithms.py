@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Tyler Sorensen
 # February 17, 2011
 # University of Utah
@@ -6,8 +7,10 @@
 
 # This is where all the actual algorithms are
 
+from builtins import str
+from builtins import range
 from types import *
-from PyBool_builder import *
+from .PyBool_builder import *
 import copy
 import pdb
 
@@ -712,7 +715,7 @@ def mk_var_name(expr, repHash):
     var_list = [x[0] for x in m]
 
     r_name, i = "Z1", 1
-    taken_names = [x["name"][0] for x in repHash.values()]
+    taken_names = [x["name"][0] for x in list(repHash.values())]
 
     while r_name in var_list or r_name in taken_names:
         i = i + 1
@@ -978,7 +981,7 @@ def make_hash(o):
         return hash(o)
 
     new_o = copy.deepcopy(o)
-    for k, v in new_o.items():
+    for k, v in list(new_o.items()):
         new_o[k] = make_hash(v)
 
-    return hash(tuple(frozenset(new_o.items())))
+    return hash(tuple(frozenset(list(new_o.items()))))

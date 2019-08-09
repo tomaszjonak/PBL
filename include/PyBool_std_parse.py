@@ -1,18 +1,22 @@
+from __future__ import absolute_import
 # Tyler Sorensen
 # February 17, 2012
 # University of Utah
 
 # Parser for general equations
 
+from builtins import str
+from builtins import zip
 import ply.lex as lex
 import ply.yacc as yacc
 import pdb
 import itertools
-from PyBool_builder import *
-from PyBool_public_interface import Parse_Error
-from PyBool_public_interface import rename_var
-from PyBool_public_interface import rename_var_list
-from PyBool_public_interface import print_expr
+from .PyBool_builder import *
+from .PyBool_public_interface import Parse_Error
+from .PyBool_public_interface import rename_var
+from .PyBool_public_interface import rename_var_list
+from .PyBool_public_interface import print_expr
+from functools import reduce
 
 #############################################
 # Lex
@@ -185,16 +189,16 @@ def p_expression_exists(p):
 
 def p_expression_exists_excl(p):
     '''expression : EXISTS_EXCL variableList DOT LPAREN expression RPAREN'''
-    q = [rename_var_list(p[5], zip(p[2], perm)) for perm in itertools.permutations(var_order, len(p[2]))]
+    q = [rename_var_list(p[5], list(zip(p[2], perm))) for perm in itertools.permutations(var_order, len(p[2]))]
     p[0] = reduce(lambda x, y: mk_or_expr(x, y), q)
 
 
 def p_expression_rename(p):
     '''expression : VARIABLE LBRAC variableList COLON ASSIGNOP variableList RBRAC'''
-    dom = sub_expr.keys()
+    dom = list(sub_expr.keys())
     if p[1] in dom:
         expr = sub_expr[p[1]]
-        p[0] = rename_var_list(expr, zip(p[3], p[6]))
+        p[0] = rename_var_list(expr, list(zip(p[3], p[6])))
     else:
         raise Parse_Error("Expression: " + p[1] + " is not declared. Line Number: " + str(line_num))
 
@@ -205,7 +209,7 @@ def p_expression_var(p):
 
     # See if we've seen the variable before, if so,
     # just return it.
-    dom = sub_expr.keys()
+    dom = list(sub_expr.keys())
     if p[1] in dom:
         p[0] = sub_expr[p[1]]
 
