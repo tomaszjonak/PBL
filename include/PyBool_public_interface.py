@@ -1,25 +1,25 @@
-#Tyler Sorensen
-#February 15, 2012
-#University of Utah
+# Tyler Sorensen
+# February 15, 2012
+# University of Utah
 
-#PyBool_public_interface.py
+# PyBool_public_interface.py
 
-#The public interface for PyBool. Methods and representation
-#styles are described more completely in README.txt
+# The public interface for PyBool. Methods and representation
+# styles are described more completely in README.txt
 
 import PyBool_algorithms as PBA
 import PyBool_builder as PBB
 import copy
 import pdb
 
-#note: This is the public interface, so while
-#some of the calls look redundant, it is in this
-#form so that extra code can be added in the
-#future without worrying about messing with 
-#the algorithms
+# note: This is the public interface, so while
+# some of the calls look redundant, it is in this
+# form so that extra code can be added in the
+# future without worrying about messing with
+# the algorithms
 
 #####################################################
-#RECURSIVE REPRESENTATION INTERFACE
+# RECURSIVE REPRESENTATION INTERFACE
 #####################################################
 
 
@@ -41,11 +41,13 @@ def apply_sol_expr(expr, sol):
     """
     return PBA.apply_sol_expr(expr, sol)
 
+
 def print_expr(expr):
     """
     prints a readable string representing the expression EXPR
     """
     return PBA.print_expr(expr)
+
 
 def rename_var(expr, tup):
     """
@@ -53,6 +55,7 @@ def rename_var(expr, tup):
     """
     cop_expr = copy.deepcopy(expr)
     return PBA.rename_var(cop_expr, tup)
+
 
 def rename_var_list(expr, tup_list):
     """
@@ -67,12 +70,13 @@ def nne(expr):
     """
     converts the expression EXPR into negation normal form
     """
-    #first get rid of all non standard
-    #operators
+    # first get rid of all non standard
+    # operators
     expr = PBA.std_expr(expr)
 
-    #Then propagate the negation
+    # Then propagate the negation
     return PBA.nne(expr)
+
 
 def exp_cnf(expr):
     """
@@ -80,11 +84,12 @@ def exp_cnf(expr):
     large cnf expression (still recursive, use cnf_list to
     convert to list representation)
     """
-    #Convert to nne
+    # Convert to nne
     expr = nne(expr)
-    
-    #distribute
+
+    # distribute
     return PBA.exp_cnf(expr)
+
 
 def poly_cnf(expr):
     """
@@ -96,6 +101,7 @@ def poly_cnf(expr):
     repHash = {}
     return PBA.poly_cnf(expr, repHash)
 
+
 def cnf_list(expr):
     """
     returns a list representation of the recursive expression EXPR
@@ -104,24 +110,27 @@ def cnf_list(expr):
     of a list of tuples)
     """
 
-    #Get a var map, create a new one (in case the old one
-    #is wrong) and apply the new map.
+    # Get a var map, create a new one (in case the old one
+    # is wrong) and apply the new map.
     m = PBA.get_var_map(expr)
     m = PBA.create_new_map(m)
     PBA.apply_map(expr, m)
 
-    return {"Clauses" : PBA.cnf_list(expr) ,
-            "map"     : m              }
+    return {"Clauses": PBA.cnf_list(expr),
+            "map": m}
+
 
 def number_vars(expr):
     """
     returns the number of variables in expr
-    """    
+    """
     m = PBA.get_var_map(expr)
     return len(m)
 
+
 def get_vars(expr):
     return [x[0] for x in PBA.get_var_map(expr)]
+
 
 def simplify(expr):
     """
@@ -134,7 +143,7 @@ def simplify(expr):
 
 
 #####################################################
-#CNF LIST REPRESENTATION INTERFACE
+# CNF LIST REPRESENTATION INTERFACE
 #####################################################
 
 def cnf_propagate(clauses, variable, truth_value):
@@ -144,6 +153,7 @@ def cnf_propagate(clauses, variable, truth_value):
     """
     return PBA.cnf_propagate(clauses, variable, truth_value)
 
+
 def cnf_apply_sol(clauses, sol):
     """
     applys the solution SOL to CLAUSES (should return a 
@@ -152,12 +162,14 @@ def cnf_apply_sol(clauses, sol):
     """
     return PBA.cnf_apply_sol(clauses, sol)
 
+
 def cnf_get_unit_clauses(clauses):
     """
     returns a list of literals appearing in unit clauses
     in CLAUSES
     """
     return PBA.cnf_get_unit_clauses(clauses)
+
 
 def cnf_get_pure_literals(clauses):
     """
@@ -166,11 +178,13 @@ def cnf_get_pure_literals(clauses):
     """
     return PBA.cnf_get_pure_literals(clauses)
 
+
 def cnf_get_var(literal):
     """
     given a literal LITERAL, return the variable it represents
     """
     return abs(literal)
+
 
 def cnf_get_sign(literal):
     """
@@ -179,6 +193,7 @@ def cnf_get_sign(literal):
     """
     return literal > 0
 
+
 def cnf_to_rec(clauses):
     """
     given a list form of an expression CLAUSES, return an equivalent
@@ -186,18 +201,21 @@ def cnf_to_rec(clauses):
     """
     return PBA.cnf_to_rec(clauses)
 
+
 def cnf_vars(clauses):
     """
     return a list of variables in the list represented expression CLAUSES
     """
     return list(set([abs(lit) for clause in clauses for lit in clause]))
 
+
 def cnf_sat(clauses):
     """
     returns true if clauses is satisfied
     """
     return len(clauses) == 0
-    
+
+
 def cnf_unsat(clauses):
     """
     returns true if clauses is un-satisfied
@@ -205,7 +223,7 @@ def cnf_unsat(clauses):
     return True in [len(x) == 0 for x in clauses]
 
 #####################################################
-#FILE IO INTERFACE
+# FILE IO INTERFACE
 #####################################################
 
 
@@ -213,10 +231,13 @@ class Parse_Error(Exception):
     """
     The exception that gets raised if there is a parsing error
     """
+
     def __init__(self, value):
         self.value = value
+
     def __str__(self):
         return repr(self.value)
+
 
 def parse_dimacs(fname):
     """
@@ -226,10 +247,11 @@ def parse_dimacs(fname):
 
     from PyBool_dimacs_parse import parse_file as parse_dimacs_file
     clauses = parse_dimacs_file(fname)
-    
-    return {"num_vars"    : len(cnf_vars(clauses)),
-            "num_clauses" : len(clauses)          ,
-            "clauses"     : clauses               }
+
+    return {"num_vars": len(cnf_vars(clauses)),
+            "num_clauses": len(clauses),
+            "clauses": clauses}
+
 
 def write_dimacs(clauses, fname):
     """
@@ -237,28 +259,29 @@ def write_dimacs(clauses, fname):
     a dimacs formatted file FNAME
     """
 
-    #opening comments
+    # opening comments
     f = open(fname, 'w')
     s = "c File Produced by PyBool\n"
     f.write(s)
-    
-    #stat line
+
+    # stat line
     s = "p cnf %i %i\n" % (len(cnf_vars(clauses)), len(clauses))
     f.write(s)
 
-    #write the clauses
+    # write the clauses
     for clause in clauses:
         s = ""
         for literal in clause:
             s = "%s %i" % (s, literal)
-        
-        #end the line
+
+        # end the line
         s = "%s 0\n" % s
         s = s[1:len(s)]
         f.write(s)
 
-    #close the file
+    # close the file
     f.close()
+
 
 def parse_std(fname):
     """
