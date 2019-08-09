@@ -10,7 +10,7 @@ from __future__ import absolute_import
 from builtins import str
 from builtins import range
 from types import *
-from .PyBool_builder import *
+from PyBool_builder import *
 import copy
 import pdb
 

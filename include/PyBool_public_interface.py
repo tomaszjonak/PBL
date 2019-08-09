@@ -8,8 +8,8 @@ from __future__ import absolute_import
 # The public interface for PyBool. Methods and representation
 # styles are described more completely in README.txt
 
-from . import PyBool_algorithms as PBA
-from . import PyBool_builder as PBB
+import PyBool_algorithms as PBA
+import PyBool_builder as PBB
 import copy
 import pdb
 
@@ -291,5 +291,5 @@ def parse_std(fname):
     "var_order": the optional ordering of the variables
     "main_expr": the main expression parsed
     """
-    from .PyBool_std_parse import parse_file as parse_std_file
+    from PyBool_std_parse import parse_file as parse_std_file
     return parse_std_file(fname)

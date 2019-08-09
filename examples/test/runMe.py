@@ -1,9 +1,12 @@
 #! /usr/bin/env python2.7
 
+
 from __future__ import print_function
-import PyBool_public_interface as Bool
+
 import sys
-sys.path.append("../../include/")
+sys.path.append("../../include")
+
+import PyBool_public_interface as Bool
 
 
 if __name__ == "__main__":

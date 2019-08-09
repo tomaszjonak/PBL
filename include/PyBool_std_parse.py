@@ -11,11 +11,11 @@ import ply.lex as lex
 import ply.yacc as yacc
 import pdb
 import itertools
-from .PyBool_builder import *
-from .PyBool_public_interface import Parse_Error
-from .PyBool_public_interface import rename_var
-from .PyBool_public_interface import rename_var_list
-from .PyBool_public_interface import print_expr
+from PyBool_builder import *
+from PyBool_public_interface import Parse_Error
+from PyBool_public_interface import rename_var
+from PyBool_public_interface import rename_var_list
+from PyBool_public_interface import print_expr
 from functools import reduce
 
 #############################################
